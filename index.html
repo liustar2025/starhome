@@ -46,16 +46,16 @@
             transform: scale(1.05);
         }
 
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(-20px); }
-            10% { opacity: 1; transform: translateY(0); }
-            90% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-20px); }
+        @keyframes slideInOut {
+            0% { transform: translateY(-20px); }
+            10% { transform: translateY(0); }
+            90% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
         }
     </style>
 </head>
 <body>
-    <h2>🐶 和小狗做朋友吧！</h2>
+    <h2>周然，请和小狗永远在一起吧！</h2>
     <div id="dog"></div>
     
     <div class="cards">
@@ -89,8 +89,9 @@
                 background: ${responses[action].color};
                 border-radius: 15px;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                animation: fadeInOut 5s forwards;
+                animation: slideInOut 5s forwards;
                 z-index: 1000;
+                opacity: 1;
             `;
 
             document.body.appendChild(currentFeedback);
