@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>和小狗互动</title>
+    <style>
+        /* 修复样式表错误 */
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f0f8ff;
+            min-height: 100vh;
+        }
+
+        #dog {
+            width: 200px;
+            height: 200px;
+            margin: 20px;
+            background: url(https://img.icons8.com/plasticine/200/dog.png) center/cover;
+        }
+
+        .cards {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100px;
+            height: 120px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            font-size: 18px;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        /* 新增动画关键帧 */
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <h2>🐶 和小狗做朋友吧！</h2>
+    <div id="dog"></div>
+    
+    <div class="cards">
+        <!-- 修正事件函数名 -->
+        <div class="card" onclick="handleInteract('和好')">🤝 和好</div>
+        <div class="card" onclick="handleInteract('抚摸')">🐾 抚摸</div>
+        <div class="card" onclick="handleInteract('喂食')">🍖 喂食</div>
+    </div>
+
+    <script>
+        // 修复后的JavaScript代码
+        let currentFeedback = null;
+        let feedbackTimer = null;
+
+        function handleInteract(action) {
+            const responses = {
+                '和好': { text: '小狗摇着尾巴原谅你了！', color: '#98FB98' },
+                '抚摸': { text: '小狗开心地翻肚皮啦！', color: '#FFB6C1' },
+                '喂食': { text: '小狗吃得尾巴直摇~', color: '#87CEFA' }
+            };
+
+            // 清除已有元素
+            if (currentFeedback) {
+                currentFeedback.remove();
+                clearTimeout(feedbackTimer);
+            }
+
+            // 创建反馈元素
+            currentFeedback = document.createElement('div');
+            currentFeedback.textContent = responses[action].text;
+            currentFeedback.style.cssText = `
+                position: fixed;
+                top: 20px;
+                padding: 15px 25px;
+                background: ${responses[action].color};
+                border-radius: 15px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                animation: fadeInOut 5s forwards;
+                z-index: 1000;
+            `;
+
+            document.body.appendChild(currentFeedback);
+
+            // 设置自动消失
+            feedbackTimer = setTimeout(() => {
+                currentFeedback.remove();
+                currentFeedback = null;
+            }, 5000);
+
+            // 背景色变化
+            document.body.style.transition = 'background 0.5s ease';
+            document.body.style.backgroundColor = responses[action].color;
+        }
+    </script>
+</body>
+</html>
