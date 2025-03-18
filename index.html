@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>和小狗互动</title>
     <style>
-        /* 修复样式表错误 */
         body {
             margin: 0;
             padding: 20px;
@@ -13,6 +12,7 @@
             align-items: center;
             background: #f0f8ff;
             min-height: 100vh;
+            transition: background 0.5s ease;
         }
 
         #dog {
@@ -47,11 +47,37 @@
             transform: scale(1.05);
         }
 
-        /* 新增动画关键帧 */
+        .feedback-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 20px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .feedback {
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: fadeInOut 10s forwards;
+            pointer-events: none;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 200px;
+            backdrop-filter: blur(5px);
+        }
+
         @keyframes fadeInOut {
             0% { opacity: 0; transform: translateY(-20px); }
-            10% { opacity: 1; transform: translateY(0); }
-            90% { opacity: 1; transform: translateY(0); }
+            5% { opacity: 1; transform: translateY(0); }
+            95% { opacity: 1; transform: translateY(0); }
             100% { opacity: 0; transform: translateY(-20px); }
         }
     </style>
@@ -61,54 +87,37 @@
     <div id="dog"></div>
     
     <div class="cards">
-        <!-- 修正事件函数名 -->
         <div class="card" onclick="handleInteract('和好')">🤝 和好</div>
         <div class="card" onclick="handleInteract('抚摸')">🐾 抚摸</div>
         <div class="card" onclick="handleInteract('喂食')">🍖 喂食</div>
     </div>
 
+    <div class="feedback-container" id="feedbackContainer"></div>
+
     <script>
-        // 修复后的JavaScript代码
-        let currentFeedback = null;
-        let feedbackTimer = null;
+        const responses = {
+            '和好': { text: '小狗摇着尾巴原谅你了！', color: '#98FB98' },
+            '抚摸': { text: '小狗开心地翻肚皮啦！', color: '#FFB6C1' },
+            '喂食': { text: '小狗吃得尾巴直摇~', color: '#87CEFA' }
+        };
 
         function handleInteract(action) {
-            const responses = {
-                '和好': { text: '小狗摇着尾巴原谅你了！', color: '#98FB98' },
-                '抚摸': { text: '小狗开心地翻肚皮啦！', color: '#FFB6C1' },
-                '喂食': { text: '小狗吃得尾巴直摇~', color: '#87CEFA' }
-            };
-
-            // 清除已有元素
-            if (currentFeedback) {
-                currentFeedback.remove();
-                clearTimeout(feedbackTimer);
-            }
-
             // 创建反馈元素
-            currentFeedback = document.createElement('div');
-            currentFeedback.textContent = responses[action].text;
-            currentFeedback.style.cssText = `
-                position: fixed;
-                top: 20px;
-                padding: 15px 25px;
-                background: ${responses[action].color};
-                border-radius: 15px;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                animation: fadeInOut 5s forwards;
-                z-index: 1000;
-            `;
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback';
+            feedback.textContent = responses[action].text;
+            feedback.style.backgroundColor = responses[action].color;
+            
+            // 添加到容器中
+            const container = document.getElementById('feedbackContainer');
+            container.appendChild(feedback);
 
-            document.body.appendChild(currentFeedback);
-
-            // 设置自动消失
-            feedbackTimer = setTimeout(() => {
-                currentFeedback.remove();
-                currentFeedback = null;
-            }, 5000);
+            // 10秒后移除
+            setTimeout(() => {
+                feedback.remove();
+            }, 10000);
 
             // 背景色变化
-            document.body.style.transition = 'background 0.5s ease';
             document.body.style.backgroundColor = responses[action].color;
         }
     </script>
